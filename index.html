@@ -2,221 +2,257 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drewno & Stal | Warsztat</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Andrzej Tyro - Drewno i Metal</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Pacifico&family=Montserrat:wght@300;600;900&display=swap" rel="stylesheet">
+
     <style>
-        /* PODSTAWA */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; } /* Płynne przewijanie do sekcji */
-        body { background: #000; color: #fff; font-family: 'Inter', sans-serif; overflow: hidden; }
-
-        /* =========================================================
-           GÓRNY PASEK - WERSJA DOPRACOWANA
-           ========================================================= */
-        
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            height: 90px;
-            background: rgba(0, 0, 0, 0.4); /* Lżejsze tło dla elegancji */
-            backdrop-filter: blur(20px); /* Mocniejszy blur */
-            -webkit-backdrop-filter: blur(20px);
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 1s ease;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        :root {
+            --accent-color: #d4a373;
+            --bg-dark: #0f0f0f;
+            --text-main: #f5f5f5;
+            --header-h-desktop: 95px;
+            --header-h-mobile: 70px;
+            --anim-speed: 0.45s;
         }
-        header.visible { opacity: 1; }
 
-        /* Logo i Telefon */
-        #brand-container {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        /* --- MECHANIZM SCROLL SNAP (Płynne przeskakiwanie sekcji) --- */
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+        }
+
+        body.menu-open { overflow: hidden; }
+
+        /* --- TWOJA SPRAWDZONA KONSTRUKCJA HEADERA --- */
+        header {
+            position: fixed; top: 0; left: 0; width: 100%; height: var(--header-h-desktop);
+            background-color: rgba(15, 15, 15, 0.98); border-bottom: 3px solid var(--accent-color);
+            display: flex; align-items: center; justify-content: space-between; padding: 0 5%;
+            z-index: 10001; backdrop-filter: blur(15px); transition: all var(--anim-speed) ease-in-out;
+        }
+
+        .logo { display: flex; align-items: baseline; text-decoration: none; flex: 1; min-width: 0; }
+        .cap { font-family: 'Anton', sans-serif; color: var(--accent-color); font-size: 4.8rem; line-height: 0.75; text-transform: uppercase; transition: all var(--anim-speed) ease-in-out; }
+        .extra { font-family: 'Pacifico', cursive; font-size: 1.7rem; color: var(--text-main); white-space: nowrap; overflow: hidden; max-width: 600px; opacity: 1; margin-left: 5px; transition: all var(--anim-speed) ease-in-out; }
+        .phone-center { position: absolute; left: 50%; transform: translate(-50%, 15px); font-size: 1.4rem; font-weight: 600; color: var(--accent-color); opacity: 0; visibility: hidden; transition: all var(--anim-speed) ease-in-out; white-space: nowrap; }
+        .menu-btn { font-weight: 600; letter-spacing: 2px; font-size: 0.95rem; color: var(--text-main); text-transform: uppercase; cursor: pointer; width: 40px; text-align: right; }
+
+        header.scrolled { height: 75px; }
+        header.scrolled .extra { max-width: 0; opacity: 0; margin: 0; }
+        header.scrolled .cap { font-size: 3.5rem; }
+        header.scrolled .phone-center { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+
+        /* --- TWOJE MENU OVERLAY --- */
+        #menu-overlay { position: fixed; bottom: -100%; left: 0; width: 100%; height: 100%; background-color: var(--accent-color); z-index: 10000; transition: bottom 0.6s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; color: #000; }
+        #menu-overlay.active { bottom: 0; }
+        .menu-header-inside { height: var(--header-h-desktop); display: flex; align-items: center; justify-content: space-between; padding: 0 5%; }
+        .menu-logo-static { font-family: 'Anton', sans-serif; font-size: 3.5rem; text-transform: uppercase; }
+        .menu-content { flex: 1; display: flex; flex-direction: column; justify-content: center; padding-left: 10%; }
+        .menu-links { list-style: none; }
+        .menu-links li { margin: 15px 0; }
+        .menu-links a { font-family: 'Anton', sans-serif; font-size: clamp(2.5rem, 8vw, 5rem); color: #000; text-decoration: none; transition: transform 0.4s ease; display: inline-block; }
+        .menu-links a:hover { transform: translateX(30px); }
+
+        /* --- NOWOCZESNE BLOKI (Sekcje na cały ekran) --- */
+        section {
+            width: 100%;
+            height: 100vh;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
-            z-index: 2000;
-            transition: all 1.5s cubic-bezier(0.85, 0, 0.15, 1);
+            position: relative;
+            padding: 20px;
+        }
+
+        /* BLOK 1: MOTTO (HERO) */
+        #hero {
+            background-color: var(--accent-color);
+            color: #000;
+            text-align: center;
+            padding-top: var(--header-h-desktop);
+        }
+
+        .motto-wrap {
+            font-family: 'Anton', sans-serif;
+            font-size: clamp(1.8rem, 7vw, 5.5rem);
+            line-height: 1.1;
+            text-transform: uppercase;
+        }
+
+        .line-1 {
+            display: block;
+            transform: translateX(-100%);
+            animation: slideInLeft 1s forwards cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .line-2 {
+            display: block;
+            margin-top: 10px;
+            padding: 5px 15px;
+            background: #000;
+            color: var(--text-main);
+            transform: translateX(100%);
+            animation: slideInRight 1s 0.3s forwards cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideInLeft { to { transform: translateX(0); } }
+        @keyframes slideInRight { to { transform: translateX(0); } }
+
+        /* BLOK 2: O MNIE */
+        #o-mnie { background: var(--bg-dark); }
+        .about-text-box { max-width: 800px; text-align: center; }
+        .about-text-box h2 { font-family: 'Anton', sans-serif; font-size: 4rem; color: var(--accent-color); margin-bottom: 20px; }
+        .about-text-box p { font-size: 1.2rem; line-height: 1.8; color: #ccc; }
+
+        /* BLOKI PROJEKTÓW */
+        .project-block {
+            background-size: cover;
+            background-position: center;
+        }
+        .project-block::before {
+            content: ""; position: absolute; top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.5);
+        }
+        .project-desc {
+            position: absolute; bottom: 10%;
+            z-index: 2; background: rgba(0,0,0,0.8);
+            padding: 15px 30px; border-bottom: 4px solid var(--accent-color);
+            font-family: 'Anton', sans-serif; font-size: 1.8rem; letter-spacing: 2px;
+        }
+
+        /* BLOK GALERIA INTRO */
+        #galeria-intro {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1467043153537-a4fba2cd39ef?q=80&w=1200') center/cover;
             text-align: center;
         }
+        #galeria-intro h2 { font-family: 'Anton', sans-serif; font-size: clamp(3rem, 10vw, 7rem); color: var(--accent-color); }
 
-        .logo-wrapper { display: flex; align-items: center; gap: 20px; transition: gap 1.5s ease; }
-        #logo-icon { width: 60px; height: auto; fill: #fff; transition: all 1.5s ease; }
-        #main-logo { font-size: clamp(1.8rem, 7vw, 5rem); font-weight: 900; letter-spacing: 15px; text-transform: uppercase; transition: all 1.5s ease; }
-        #phone-number { font-size: 1rem; letter-spacing: 3px; margin-top: 15px; opacity: 0; color: #d4af37; transition: opacity 1s ease; }
-        #phone-number a { color: inherit; text-decoration: none; }
+        /* BLOK KONTAKT */
+        #kontakt { background: #151515; text-align: center; }
+        .contact-card h2 { font-family: 'Anton', sans-serif; font-size: 3.5rem; color: var(--accent-color); margin-bottom: 20px; }
+        .contact-card p { font-size: 1.5rem; margin-bottom: 10px; }
+        .socials { margin-top: 30px; font-size: 2.5rem; display: flex; gap: 30px; justify-content: center; }
+        .socials a { color: var(--text-main); }
 
-        /* Header Active State */
-        #brand-container.moved-to-header { top: 45px; }
-        #brand-container.moved-to-header #logo-icon { width: 28px; fill: #d4af37; }
-        #brand-container.moved-to-header #main-logo { font-size: 1.1rem; letter-spacing: 6px; color: #d4af37; }
-        #brand-container.moved-to-header #phone-number { opacity: 1; font-size: 0.75rem; margin-top: 2px; }
-
-        /* MENU HAMBURGER */
-        .nav-trigger {
-            position: absolute;
-            right: 30px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 3000;
-            cursor: pointer;
-            padding: 10px;
-            opacity: 0;
-            transition: opacity 1s ease 3.5s;
+        /* RESPONSIVE HEADERA */
+        @media (max-width: 600px) {
+            header, .menu-header-inside { height: var(--header-h-mobile); }
+            .cap { font-size: 8.5vw; }
+            .extra { font-size: 3.8vw; max-width: 42vw; }
+            header.scrolled .cap { font-size: 7.5vw; }
+            .project-desc { font-size: 1.2rem; width: 85%; text-align: center; }
         }
-        header.visible .nav-trigger { opacity: 1; }
-
-        .hamburger {
-            width: 25px;
-            height: 14px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        .hamburger span {
-            display: block;
-            width: 100%;
-            height: 1px; /* Cienkie, eleganckie linie */
-            background: #d4af37;
-            transition: all 0.3s ease;
-        }
-
-        /* Animacja hamburgera do X */
-        .nav-trigger.open .line1 { transform: translateY(6.5px) rotate(45deg); }
-        .nav-trigger.open .line2 { opacity: 0; }
-        .nav-trigger.open .line3 { transform: translateY(-6.5px) rotate(-45deg); }
-
-        /* ROZWIJANA LISTA (Full Screen Overlay Style) */
-        .nav-menu {
-            position: fixed;
-            top: 0;
-            right: -100%; /* Ukryte za ekranem */
-            width: 300px;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.95);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 50px;
-            transition: right 0.5s cubic-bezier(0.77,0,0.175,1);
-            z-index: 2500;
-            border-left: 1px solid rgba(212, 175, 55, 0.2);
-        }
-        .nav-menu.active { right: 0; }
-
-        .nav-menu a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 1.5rem;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            margin: 20px 0;
-            font-weight: 300;
-            transition: color 0.3s;
-        }
-        .nav-menu a:hover { color: #d4af37; }
-
-        /* =========================================================
-           KONIEC GÓRNEGO PASKA
-           ========================================================= */
-
-        section { height: 100vh; width: 100%; position: sticky; top: 0; display: flex; align-items: center; justify-content: center; scroll-snap-align: start; overflow: hidden; background: #0a0a0a; }
-        .hero { opacity: 0; transition: opacity 1.5s ease; }
-        .hero.visible { opacity: 1; }
-        .bg-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.4); transition: all 0.8s ease; }
-        .shrink { transform: scale(0.95); filter: brightness(0.15) blur(5px); }
-        .content { position: relative; z-index: 10; text-align: center; }
-        h2 { font-size: clamp(1.5rem, 5vw, 3rem); font-weight: 300; letter-spacing: 10px; }
     </style>
 </head>
-<body>
+<body id="main-body">
 
-    <header id="top-bar">
-        <div class="nav-trigger" onclick="toggleMenu()">
-            <div class="hamburger">
-                <span class="line1"></span>
-                <span class="line2"></span>
-                <span class="line3"></span>
-            </div>
+    <header id="navbar">
+        <div class="logo">
+            <span class="cap">A</span><span class="extra">ndrzej</span>
+            <span class="cap">T</span><span class="extra">yro</span>
+            <span class="extra">-</span>
+            <span class="cap">D</span><span class="extra">rewno i</span>
+            <span class="cap">M</span><span class="extra">etal</span>
         </div>
+        <div class="phone-center">+48 661 594 397</div>
+        <div class="menu-btn" id="menu-toggle-btn" onclick="toggleMenu()">MENU</div>
     </header>
 
-    <nav class="nav-menu" id="side-menu">
-        <a href="#hero" onclick="toggleMenu()">Start</a>
-        <a href="#galeria" onclick="toggleMenu()">Galeria</a>
-        <a href="#kontakt" onclick="toggleMenu()">Kontakt</a>
-    </nav>
-
-    <div id="brand-container">
-        <div class="logo-wrapper">
-            <svg id="logo-icon" viewBox="0 0 100 100">
-                <rect x="20" y="20" width="60" height="6" />
-                <rect x="20" y="47" width="60" height="6" />
-                <rect x="20" y="74" width="60" height="6" />
-                <rect x="47" y="10" width="6" height="80" />
-            </svg>
-            <div id="main-logo">Drewno&Stal</div>
+    <div id="menu-overlay">
+        <div class="menu-header-inside">
+            <div class="menu-logo-static">ATDM</div>
         </div>
-        <div id="phone-number">
-            <a href="tel:+48111222333">+48 111 222 333</a>
-        </div>
+        <nav class="menu-content">
+            <ul class="menu-links">
+                <li><a href="#hero" onclick="toggleMenu()">START</a></li>
+                <li><a href="#o-mnie" onclick="toggleMenu()">O MNIE</a></li>
+                <li><a href="#projekty-start" onclick="toggleMenu()">PROJEKTY</a></li>
+                <li><a href="#galeria-intro" onclick="toggleMenu()">GALERIA</a></li>
+                <li><a href="#kontakt" onclick="toggleMenu()">KONTAKT</a></li>
+            </ul>
+        </nav>
     </div>
 
-    <section class="hero" id="hero">
-        <div class="content"><h1>"Razem zbudujemy przestrzeń dla Twojego życia"</h1></div>
+    <section id="hero">
+        <div class="motto-wrap">
+            <span class="line-1">Zrealizujmy wspólnie projekt</span>
+            <span class="line-2">w którym chce się żyć</span>
+        </div>
     </section>
 
-    <section id="galeria" style="z-index: 2;">
-        <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1200&q=80" class="bg-img">
-        <div class="content"><h2>PROJEKTY</h2></div>
+    <section id="o-mnie">
+        <div class="about-text-box">
+            <h2>O MNIE</h2>
+            <p>Moje rzemiosło to nie produkcja taśmowa, to pasja do materiałów, które przetrwają lata. Tworzę meble, które mają duszę.</p>
+        </div>
     </section>
 
-    <section id="kontakt" style="z-index: 10;">
-        <div class="content">
+    <section id="projekty-start" class="project-block" style="background-image: url('https://images.unsplash.com/photo-1581428982868-e410dd047a90?q=80&w=1200');">
+        <div class="project-desc">STÓŁ DĘBOWY LOFT</div>
+    </section>
+
+    <section class="project-block" style="background-image: url('https://images.unsplash.com/photo-1592078615290-033ee584e267?q=80&w=1200');">
+        <div class="project-desc">REGAŁ STAL I DĄB</div>
+    </section>
+
+    <section class="project-block" style="background-image: url('https://images.unsplash.com/photo-1611486212330-372394afaa1b?q=80&w=1200');">
+        <div class="project-desc">KONSOLA MODERN</div>
+    </section>
+
+    <section id="galeria-intro">
+        <h2>GALERIA</h2>
+        <p style="letter-spacing: 5px; color: #fff; margin-top: 20px;">ZOBACZ WIĘCEJ PRAC</p>
+    </section>
+
+    <section id="kontakt">
+        <div class="contact-card">
             <h2>KONTAKT</h2>
-            <p style="margin-top: 20px; color: #888;">biuro@drewnostal.pl</p>
+            <p>Andrzej Tyro</p>
+            <p>+48 661 594 397</p>
+            <div class="socials">
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-whatsapp"></i></a>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+            </div>
         </div>
     </section>
 
     <script>
-        // Logika Menu
+        const navbar = document.getElementById("navbar");
+        const menuOverlay = document.getElementById("menu-overlay");
+        const menuBtn = document.getElementById("menu-toggle-btn");
+        const body = document.getElementById("main-body");
+
         function toggleMenu() {
-            document.querySelector('.nav-trigger').classList.toggle('open');
-            document.getElementById('side-menu').classList.toggle('active');
+            const isOpen = menuOverlay.classList.toggle("active");
+            body.classList.toggle("menu-open");
+            menuBtn.innerHTML = isOpen ? "&#10005;" : "MENU";
+            menuBtn.style.fontSize = isOpen ? "1.5rem" : "0.95rem";
         }
 
-        // Sekwencja startowa
-        window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => {
-                document.getElementById('brand-container').classList.add('moved-to-header');
-                document.getElementById('top-bar').classList.add('visible');
-            }, 3000);
-
-            setTimeout(() => document.getElementById('hero').classList.add('visible'), 5000);
-            setTimeout(() => { document.body.style.overflow = "auto"; }, 7000);
-        });
-
-        // Stacking Cards Effect
-        window.addEventListener('scroll', () => {
-            document.querySelectorAll('section').forEach((section) => {
-                const rect = section.getBoundingClientRect();
-                const img = section.querySelector('.bg-img');
-                if (img) {
-                    if (rect.top <= 0 && rect.bottom > 100) {
-                        img.classList.add('shrink');
-                    } else {
-                        img.classList.remove('shrink');
-                    }
-                }
-            });
-        });
+        window.addEventListener("scroll", function() {
+            if (window.pageYOffset > 50) {
+                navbar.classList.add("scrolled");
+            } else {
+                navbar.classList.remove("scrolled");
+            }
+        }, { passive: true });
     </script>
+
 </body>
 </html>
